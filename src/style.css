@@ -1,0 +1,9 @@
+h1, p, form {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+}
+
+button {
+    margin-left: 10px;
+}
