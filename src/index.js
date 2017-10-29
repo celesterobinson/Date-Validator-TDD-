@@ -9,22 +9,23 @@ $(document).ready(function(){
 
 function isValidDate(date) {
     var date = document.getElementById('user-input').value;
-    console.log(date);
     if (hasValidLength(date)) {
-console.log(hasValidLength(date));
-        if(hasValidMonth(date)) {
-            if(hasValidDelimiter(date)) {
-                if(hasValidDay(date)) {
-                    document.body.style.backgroundColor = '#2ECC40';
+        if(dateIsInts(date)) {
+            if(hasValidMonth(date)) {
+                if(hasValidDelimiter(date)) {
+                    if(hasValidDay(date)) {
+                        document.body.style.backgroundColor = '#2ECC40';
+                    } else {
+                        document.body.style.backgroundColor = '#FF4136';
+                    }
                 } else {
-                    document.body.style.backgroundColor = '#FF4136';
+                document.body.style.backgroundColor = '#FF4136';
                 }
-                $('#user-input').val('');
             } else {
-              document.body.style.backgroundColor = '#FF4136';
+            document.body.style.backgroundColor = '#FF4136';
             }
         } else {
-          document.body.style.backgroundColor = '#FF4136';
+            document.body.style.backgroundColor = '#FF4136';
         }
     } else {
         document.body.style.backgroundColor = '#FF4136';
@@ -46,10 +47,6 @@ function hasValidDelimiter(date) {
     return (date.slice(2,3) === '-' && date.slice(5,6) === '-') ||   
            (date.slice(2,3) === '/' && date.slice(5,6) === '/') ||
            (date.slice(2,3) === '.' && date.slice(5,6) === '.');
-}
-
-function hasValidYear(date) {
-
 }
 
 function getDaysInMonth(date) {
@@ -96,4 +93,10 @@ function hasValidDay(date) {
       return true;
     }
     return false;
+}
+
+function dateIsInts(date) {
+    return (date.slice(0, 2) + date.slice(3, 5) + date.slice(6))
+        .split('')
+        .reduce((prev, curr) => (!prev ? prev : /^[0-9]$/.test(curr)), true);
 }

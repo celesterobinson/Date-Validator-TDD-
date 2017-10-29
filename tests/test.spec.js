@@ -1,4 +1,44 @@
 describe('isValidDate', function() {
+    describe('Uses validators', function() {
+        var hasValidLengthSpy;
+        var hasValidMonthSpy;
+        var hasValidDelimiterSpy;
+        var hasValidDaySpy;
+        beforeEach(function() {
+            hasValidLengthSpy = spyOn(window, 'hasValidLength').and.returnValue(true);
+            hasValidMonthSpy = spyOn(window, 'hasValidMonth').and.returnValue(true);
+            hasValidDelimiterSpy = spyOn(window, 'hasValidDelimiter').and.returnValue(true);
+            hasValidDaySpy = spyOn(window, 'hasValidDay').and.returnValue(true);
+        });
+
+        it('uses all validators', function() {
+            isValidDate('09-10-1992');
+            expect(hasValidLength).toHaveBeenCalledWith('09-10-1992');
+            expect(hasValidMonth).toHaveBeenCalledWith('09-10-1992');
+            expect(hasValidDelimiter).toHaveBeenCalledWith('09-10-1992');
+            expect(hasValidDay).toHaveBeenCalledWith('09-10-1992');
+        });
+        it('passes if all validators pass', function() {
+            expect(isValidDate('09-10-1992')).toBe(true);
+        })
+        it('fails if hasValidLength fails', function() {
+            hasValidLengthSpy.and.returnValue(false);
+            expect(isValidDate('09-10-1992')).toBe(false);
+        });
+        it('fails if hasValidMonth fails', function() {
+            hasValidMonthSpy.and.returnValue(false);
+            expect(isValidDate('09-10-1992')).toBe(false);
+        });
+        it('fails if hasValidDelimiter fails', function() {
+            hasValidDelimiterSpy.and.returnValue(false);
+            expect(isValidDate('09-10-1992')).toBe(false);
+        });
+        it('fails if hasValidDay fails', function() {
+            hasValidDaySpy.and.returnValue(false);
+            expect(isValidDate('09-10-1992')).toBe(false);
+        });
+    });
+
     describe('hasValidLength', function() {
         it('has 8 or 10 characters', function() {
             expect(hasValidLength('03-13-1991')).toBe(true);
@@ -66,7 +106,16 @@ describe('isValidDate', function() {
             expect(hasValidDay('10-32-1992')).toBe(false);
             expect(hasValidDay('11-31-1992')).toBe(false);
             expect(hasValidDay('12-32-1992')).toBe(false);
-
         });
+    });
+    
+    describe('dateIsInts', function() {
+        it('date only uses integers, excluding delimiters', function() {
+            expect(dateIsInts('09-10-1992')).toBe(true);
+            expect(dateIsInts('09-10-92')).toBe(true);
+
+            expect(dateIsInts('p9-10-1992')).toBe(false);
+            expect(dateIsInts('09-10-9j')).toBe(false);            
+        })
     });
 });
